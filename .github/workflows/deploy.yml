@@ -1,32 +1,18 @@
-name: Run Uptime Kuma
+name: Deploy to Cloudflare Workers
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+      - main  # 사용할 브랜치
 
 jobs:
-  uptime-kuma:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build the application
-      run: npm run build
-
-    - name: Start Uptime Kuma
-      run: npm run start
-      env:
-        NODE_ENV: production
-        PORT: 3001
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@1.0.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
